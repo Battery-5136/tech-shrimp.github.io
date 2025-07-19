@@ -1,465 +1,580 @@
+
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BatteryExport - 专业锂电池解决方案</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enhanced Contact Card</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        whatsapp: '#25D366',
+                        wechat: '#07C160',
+                        facebook: '#1877F2',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
         }
-        
-        body {
-            background: linear-gradient(135deg, #1a2a6c, #2c3e50);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            color: #fff;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 500px;
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            margin: 15px auto;
-            position: relative;
-        }
-        
-        header {
-            background: linear-gradient(90deg, #2563eb, #1d4ed8);
-            color: white;
-            text-align: center;
-            padding: 25px 15px;
-            position: relative;
-        }
-        
-        h1 {
-            font-size: 1.7rem;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-        
-        .slogan {
-            font-size: 0.95rem;
-            opacity: 0.9;
-            margin-top: 5px;
-            font-weight: 300;
-        }
-        
-        .logo {
-            width: 70px;
-            height: 70px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 34px;
-            color: white;
-        }
-        
-        .contact-list {
-            padding: 20px;
-        }
-        
-        .contact-item {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            background: #f8f9ff;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-            border: 1px solid #eef2f7;
-        }
-        
-        .contact-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .contact-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            margin-right: 15px;
-            flex-shrink: 0;
-        }
-        
-        .whatsapp .contact-icon { background: #25D366; }
-        .wechat .contact-icon { background: #09B83E; }
-        .facebook .contact-icon { background: #1877F2; }
-        .email .contact-icon { background: #D44638; }
-        
-        .contact-info {
-            flex-grow: 1;
-        }
-        
-        .contact-name {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 3px;
-            color: #2c3e50;
-        }
-        
-        .contact-value {
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        .qr-section {
-            padding: 0 20px 15px;
-            text-align: center;
-        }
-        
-        .qr-container {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .qr-item {
-            background: white;
-            border-radius: 12px;
-            padding: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            width: 150px;
-            position: relative;
-        }
-        
-        .qr-item img {
-            width: 120px;
-            height: 120px;
-            border-radius: 8px;
-            display: block;
-            margin: 0 auto 10px;
-            border: 1px solid #eee;
-        }
-        
-        .qr-label {
-            font-weight: 600;
-            color: #2c3e50;
-            font-size: 0.95rem;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: rgba(255,255,255,0.8);
-            font-size: 0.85rem;
-        }
-        
-        .back-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .ios-tips {
-            background: #f0f9ff;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 0 20px 15px;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #2c3e50;
-            border: 1px solid #cdeeff;
-        }
-        
-        .ios-tips i {
-            color: #3498db;
-            margin-right: 5px;
-        }
-        
-        .ios-tips ul {
-            text-align: left;
-            margin: 10px 0 0 20px;
-        }
-        
-        .ios-tips li {
-            margin-bottom: 8px;
-        }
-        
-        .wechat-tooltip {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.85);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            z-index: 10;
-            display: none;
-            text-align: center;
-            width: 90%;
-        }
-        
-        .qr-item:hover .wechat-tooltip {
-            display: block;
-        }
-        
-        /* iOS专用跳转按钮 */
-        .ios-jump-btn {
-            background: #09B83E;
-            color: white;
-            border: none;
-            width: 90%;
-            max-width: 300px;
-            padding: 15px 20px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 10px auto;
-            box-shadow: 0 5px 15px rgba(9, 184, 62, 0.3);
-        }
-        
-        .ios-jump-btn i {
-            margin-right: 10px;
-            font-size: 1.3rem;
-        }
-        
-        .ios-jump-btn:hover {
-            background: #07a84e;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(9, 184, 62, 0.4);
-        }
-        
-        .ios-jump-btn:active {
-            transform: translateY(1px);
-        }
-        
-        .whatsapp-btn {
-            background: #25D366;
-        }
-        
-        .whatsapp-btn:hover {
-            background: #128C7E;
-        }
-        
-        @media (max-width: 480px) {
-            .qr-container {
-                flex-direction: column;
+    </script>
+    <style type="text/css">
+        @layer utilities {
+            .content-auto { content-visibility: auto; }
+            .card-shadow { 
+                box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.05);
+            }
+            .rtl { direction: rtl; }
+            .rtl-icon { transform: scaleX(-1); }
+            .faded-text { opacity: 0.6; font-size: 0.75rem;}
+            .copy-btn { 
+                cursor: pointer; 
+                transition: all 0.2s ease; 
+                font-size: 1.1rem; 
+                margin-left: 0.2rem;
+            }
+            .copy-btn:hover { transform: scale(1.12);}
+            .copied-tip { 
+                color: #fff; 
+                background: #222; 
+                border-radius: 6px; 
+                padding: 2px 7px; 
+                font-size: 0.91em; 
+                margin-left: 8px; 
+                animation: fadeinout 1.3s;
+            }
+            @keyframes fadeinout {
+                0%{opacity:0;}
+                15%{opacity:1;}
+                85%{opacity:1;}
+                100%{opacity:0;}
+            }
+            .number-container {
+                white-space: nowrap; 
+                display: flex; 
                 align-items: center;
             }
-            
-            header {
-                padding: 20px 15px;
+            .app-icon { 
+                transition: all 0.2s; 
+                font-size: 1.7rem;
             }
-            
-            h1 {
-                font-size: 1.5rem;
+            .app-icon:hover { transform: scale(1.1);}
+            .number-copy-area {
+                background: #fff;
+                border-radius: 7px;
+                padding: 8px 12px;
+                min-width: 0;
+                display: flex;
+                align-items: center;
+                font-weight: 500;
+                font-size: 0.97rem;
+                cursor: pointer;
+                transition: all 0.2s;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             }
+            .number-copy-area:active {
+                transform: translateY(2px);
+            }
+            .arrow-ani {
+                margin-left: 13px;
+                margin-right: 3px;
+                width: 20px; height: 20px;
+                vertical-align: middle;
+                opacity: 0.78;
+                animation: arrow-move 1.2s infinite alternate;
+            }
+            @keyframes arrow-move {
+                0% { transform: translateX(0);}
+                100% {transform: translateX(4px);}
+            }
+            .border-whatsapp { border-color: #25D366 !important; }
+            .border-wechat { border-color: #07C160 !important; }
+            .border-facebook { border-color: #1877F2 !important; }
+            .arrow-whatsapp { stroke: #25D366; }
+            .arrow-wechat   { stroke: #07C160; }
+            .arrow-facebook { stroke: #1877F2; }
             
             .contact-item {
-                padding: 12px;
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                min-height: 64px;
+                border-radius: 12px;
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+            .contact-item:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             }
             
-            .ios-jump-btn {
-                width: 85%;
-                font-size: 1rem;
-                padding: 14px 18px;
+            .contact-link {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+                padding: 16px;
+                position: relative;
+            }
+            
+            .copy-section {
+                display: flex;
+                align-items: center;
+                background-color: #f9fafb;
+                padding: 12px 16px;
+                border-top: 1px solid #eee;
+                justify-content: space-between;
+            }
+            
+            .contact-label {
+                display: flex;
+                align-items: center;
+                flex: 1;
+            }
+            
+            /* 二维码样式 */
+            .qr-code-container {
+                display: flex;
+                justify-content: center;
+                gap: 1.5rem;
+                margin-top: 1.5rem;
+            }
+            
+            .qr-code-card {
+                background-color: white;
+                border-radius: 0.75rem;
+                padding: 0.75rem;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                transition: all 0.3s ease;
+                width: 140px;
+                text-align: center;
+                cursor: pointer;
+            }
+            
+            .qr-code-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+            }
+            
+            .qr-code-image {
+                width: 100%;
+                height: 140px;
+                object-fit: cover;
+                border-radius: 0.5rem;
+                margin-bottom: 0.5rem;
+                border: 1px solid #eee;
+            }
+            
+            .qr-code-label {
+                font-weight: 600;
+                color: #4a5568;
+                font-size: 0.95rem;
+            }
+            
+            /* 响应式调整 */
+            @media (max-width: 480px) {
+                .card-shadow { 
+                    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.06);
+                }
+                .number-copy-area { 
+                    font-size: 0.91rem; 
+                    padding: 8px 10px; 
+                    max-width: 160px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .app-icon { 
+                    font-size: 1.5rem;
+                }
+                .arrow-ani { 
+                    width: 16px; 
+                    height: 16px; 
+                }
+                .contact-item {
+                    min-height: auto;
+                }
+                .contact-link {
+                    padding: 14px;
+                }
+                .copy-section {
+                    padding: 10px 14px;
+                }
+                .qr-code-container {
+                    flex-direction: column;
+                    align-items: center;
+                }
+                .qr-code-card {
+                    width: 100%;
+                    max-width: 180px;
+                    margin-bottom: 0.5rem;
+                }
+            }
+            
+            /* 动效 */
+            .pulse {
+                animation: pulse 1.5s infinite;
+            }
+            
+            @keyframes pulse {
+                0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+                70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+            }
+            
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background-color: rgba(255, 255, 255, 0.3);
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+            }
+            
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
             }
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <button class="back-btn" onclick="history.back()">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-            <div class="logo">
-                <i class="fas fa-battery-full"></i>
-            </div>
-            <h1>联系我们</h1>
-            <div class="slogan">专业锂电池解决方案</div>
-        </header>
-        
-        <div class="ios-tips">
-            <i class="fas fa-info-circle"></i>
-            <strong>iOS设备使用指南：</strong>
-            <ul>
-                <li>微信跳转：点击下方"打开微信"按钮</li>
-                <li>WhatsApp跳转：点击下方"打开WhatsApp"按钮</li>
-                <li>如果无法直接跳转，请使用二维码添加联系人</li>
-                <li>长按二维码可保存到相册</li>
-            </ul>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+    <div id="contact-card" class="bg-white rounded-2xl card-shadow w-full max-w-md overflow-hidden">
+        <!-- 头部区域 -->
+        <div class="bg-gradient-to-r from-primary to-blue-400 p-6 text-white">
+            <h1 class="text-2xl font-bold mb-2" data-i18n="title">Contact Me</h1>
+            <p class="text-white/80" data-i18n="subtitle">Connect with me instantly</p>
         </div>
         
-        <div class="contact-list">
-            <div class="contact-item whatsapp" onclick="openWhatsApp()">
-                <div class="contact-icon">
-                    <i class="fab fa-whatsapp"></i>
+        <!-- 联系列表 -->
+        <div class="p-5 space-y-4">
+            <!-- WhatsApp -->
+            <div class="contact-item border-2 border-whatsapp">
+                <a href="#" class="contact-link bg-whatsapp/10" id="whatsapp-link">
+                    <div class="contact-label">
+                        <i class="fa fa-whatsapp app-icon text-whatsapp mr-4"></i>
+                        <span class="text-gray-800 font-medium text-lg" data-i18n="whatsapp">WhatsApp</span>
+                        <svg class="arrow-ani arrow-whatsapp ml-3" viewBox="0 0 24 24"><polyline points="8 5 16 12 8 19" fill="none" stroke="#25D366" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                </a>
+                <div class="copy-section">
+                    <div class="number-copy-area" data-number="8618938295136">
+                        <span>8618938295136</span>
+                    </div>
+                    <button class="copy-btn text-gray-600 hover:text-whatsapp">
+                        <i class="fa fa-copy"></i>
+                    </button>
                 </div>
-                <div class="contact-info">
-                    <div class="contact-name">WhatsApp</div>
-                    <div class="contact-value">+86 189 3829 5136</div>
-                </div>
-                <i class="fas fa-chevron-right" style="color: #888;"></i>
             </div>
             
-            <div class="contact-item wechat" onclick="openWeChat()">
-                <div class="contact-icon">
-                    <i class="fab fa-weixin"></i>
+            <!-- 微信 -->
+            <div class="contact-item border-2 border-wechat">
+                <a href="#" class="contact-link bg-wechat/10" id="wechat-link">
+                    <div class="contact-label">
+                        <i class="fa fa-weixin app-icon text-wechat mr-4"></i>
+                        <span class="text-gray-800 font-medium text-lg" data-i18n="wechat">WeChat</span>
+                        <svg class="arrow-ani arrow-wechat ml-3" viewBox="0 0 24 24"><polyline points="8 5 16 12 8 19" fill="none" stroke="#07C160" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                </a>
+                <div class="copy-section">
+                    <div class="number-copy-area" data-number="8618938295136">
+                        <span>8618938295136</span>
+                    </div>
+                    <button class="copy-btn text-gray-600 hover:text-wechat">
+                        <i class="fa fa-copy"></i>
+                    </button>
                 </div>
-                <div class="contact-info">
-                    <div class="contact-name">微信</div>
-                    <div class="contact-value">+86 189 3829 5136</div>
-                </div>
-                <i class="fas fa-chevron-right" style="color: #888;"></i>
             </div>
             
-            <div class="contact-item facebook" onclick="openFacebook()">
-                <div class="contact-icon">
-                    <i class="fab fa-facebook"></i>
+            <!-- Facebook -->
+            <div class="contact-item border-2 border-facebook">
+                <a href="#" class="contact-link bg-facebook/10" id="facebook-link">
+                    <div class="contact-label">
+                        <i class="fa fa-facebook-official app-icon text-facebook mr-4"></i>
+                        <span class="text-gray-800 font-medium text-lg" data-i18n="facebook">Facebook</span>
+                        <svg class="arrow-ani arrow-facebook ml-3" viewBox="0 0 24 24"><polyline points="8 5 16 12 8 19" fill="none" stroke="#1877F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                </a>
+                <div class="copy-section">
+                    <div class="number-copy-area" data-number="100085046826505">
+                        <span>100085046826505</span>
+                    </div>
+                    <button class="copy-btn text-gray-600 hover:text-facebook">
+                        <i class="fa fa-copy"></i>
+                    </button>
                 </div>
-                <div class="contact-info">
-                    <div class="contact-name">Facebook</div>
-                    <div class="contact-value">batteryexport</div>
-                </div>
-                <i class="fas fa-chevron-right" style="color: #888;"></i>
-            </div>
-            
-            <div class="contact-item email" onclick="openEmail()">
-                <div class="contact-icon">
-                    <i class="fas fa-envelope"></i>
-                </div>
-                <div class="contact-info">
-                    <div class="contact-name">邮箱</div>
-                    <div class="contact-value">battery3136@gmail.com</div>
-                </div>
-                <i class="fas fa-chevron-right" style="color: #888;"></i>
             </div>
         </div>
         
-        <div class="qr-section">
-            <div class="qr-container">
-                <div class="qr-item">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://u.wechat.com/EDJ7FWME2zNJ1NIcSg7Kx0Y" alt="微信二维码">
-                    <div class="qr-label">微信</div>
-                    <div class="wechat-tooltip">长按保存二维码，在微信中扫描添加</div>
+        <!-- 二维码区域 -->
+        <div class="px-6 py-4 border-t border-gray-100">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center" data-i18n="scan-qrcodes">
+                <i class="fa fa-qrcode mr-2 text-primary"></i>
+                Scan QR Codes
+            </h3>
+            <div class="qr-code-container">
+                <!-- WhatsApp 二维码 -->
+                <div class="qr-code-card" data-app="whatsapp">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://wa.me/qr/ANROANHRQHE4A1" alt="WhatsApp QR Code" class="qr-code-image">
+                    <div class="qr-code-label text-whatsapp font-medium" data-i18n="whatsapp">
+                        <i class="fa fa-whatsapp mr-1"></i> WhatsApp
+                    </div>
                 </div>
-                <div class="qr-item">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://wa.me/message/P5C34VFDAD5NK1" alt="WhatsApp二维码">
-                    <div class="qr-label">WhatsApp</div>
+                
+                <!-- 微信二维码 -->
+                <div class="qr-code-card" data-app="wechat">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://u.wechat.com/EDJ7FWME2zNJ1NIcSg7Kx0Y" alt="WeChat QR Code" class="qr-code-image">
+                    <div class="qr-code-label text-wechat font-medium" data-i18n="wechat">
+                        <i class="fa fa-weixin mr-1"></i> WeChat
+                    </div>
                 </div>
             </div>
-            
-            <!-- iOS专用跳转按钮 -->
-            <button class="ios-jump-btn wechat-btn" onclick="openWeChat()">
-                <i class="fab fa-weixin"></i> 打开微信
-            </button>
-            
-            <button class="ios-jump-btn whatsapp-btn" onclick="openWhatsApp()">
-                <i class="fab fa-whatsapp"></i> 打开WhatsApp
-            </button>
+        </div>
+        
+        <!-- 底部 -->
+        <div class="px-6 py-4 bg-gray-50 text-center text-gray-500 text-sm">
+            <p data-i18n="factory-info">From Chinese lithium battery factory, get product catalog and quote</p>
         </div>
     </div>
-    
-    <footer>
-        <p>© 2023 BatteryExport - 专业锂电池解决方案</p>
-    </footer>
 
     <script>
-        // 检测iOS设备
-        function isIOS() {
-            return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        }
-        
-        // 微信跳转函数（iOS兼容方案）
-        function openWeChat() {
-            // 尝试直接打开微信
-            window.location.href = 'weixin://';
-            
-            // 备用方案：如果打不开微信，显示提示
-            setTimeout(function() {
-                if (!document.hidden) {
-                    alert('无法打开微信，请确保已安装微信应用。或者扫描二维码添加联系人。');
+        // 语言包配置
+        const translations = {
+            'en-US': {
+                title: 'Contact Me',
+                subtitle: 'Connect with me instantly',
+                whatsapp: 'WhatsApp',
+                wechat: 'WeChat',
+                facebook: 'Facebook',
+                'factory-info': 'From Chinese lithium battery factory, get product catalog and quote',
+                'copy-success': 'Copied!',
+                'scan-qrcodes': 'Scan QR Codes',
+            },
+            'zh-CN': {
+                title: '联系我',
+                subtitle: '立即与我取得联系',
+                whatsapp: 'WhatsApp',
+                wechat: '微信',
+                facebook: 'Facebook',
+                'factory-info': '来自中国锂电池工厂，获取产品目录和报价',
+                'copy-success': '已复制!',
+                'scan-qrcodes': '扫描二维码',
+            },
+            'ar-SA': {
+                title: 'اتصل بي',
+                subtitle: 'تواصل معي على الفور',
+                whatsapp: 'واتساب',
+                wechat: 'ويتشات',
+                facebook: 'فيسبوك',
+                'factory-info': 'من مصنع بطاريات الليثيوم الصيني، احصل على كتالوج المنتجات وعرض سعر',
+                'copy-success': 'تم النسخ!',
+                'scan-qrcodes': 'مسح الرموز التسلسلية',
+            },
+            'de-DE': {
+                title: 'Kontaktiere mich',
+                subtitle: 'Komme sofort mit mir in Kontakt',
+                whatsapp: 'WhatsApp',
+                wechat: 'WeChat',
+                facebook: 'Facebook',
+                'factory-info': 'Von chinesischer Lithium-Batterie-Fabrik, Produktkatalog und Angebot erhalten',
+                'copy-success': 'Kopiert!',
+                'scan-qrcodes': 'Scannen Sie die QR-Codes',
+            },
+            'ru-RU': {
+                title: 'Свяжитесь со мной',
+                subtitle: 'Свяжитесь со мной мгновенно',
+                whatsapp: 'WhatsApp',
+                wechat: 'ВейЧат',
+                facebook: 'Фейсбук',
+                'factory-info': 'От китайской фабрики литиевых батарей. Получить каталог продукции и коммерческое предложение',
+                'copy-success': 'Скопировано!',
+                'scan-qrcodes': 'Сканируйте QR-коды',
+            }
+        };
+
+        // 检测用户语言并应用翻译
+        function detectAndApplyLanguage() {
+            const userLang = navigator.language || navigator.userLanguage;
+            const defaultLang = 'en-US';
+            let matchedLang = defaultLang;
+            for (const lang in translations) {
+                if (userLang === lang || userLang.startsWith(lang.split('-')[0])) {
+                    matchedLang = lang;
+                    break;
                 }
-            }, 1000);
-        }
-        
-        // WhatsApp跳转（iOS兼容方案）
-        function openWhatsApp() {
-            // 尝试直接打开WhatsApp
-            window.location.href = 'whatsapp://send?phone=+8618938295136';
-            
-            // 备用方案：如果打不开WhatsApp，显示提示
-            setTimeout(function() {
-                if (!document.hidden) {
-                    window.location.href = 'https://wa.me/message/P5C34VFDAD5NK1';
-                }
-            }, 500);
-        }
-        
-        // Facebook跳转
-        function openFacebook() {
-            window.location.href = 'https://www.facebook.com/profile.php?id=100085046826505';
-        }
-        
-        // 邮箱跳转
-        function openEmail() {
-            window.location.href = 'mailto:battery3136@gmail.com';
-        }
-        
-        // 添加长按保存功能（iOS兼容）
-        document.querySelectorAll('.qr-item img').forEach(img => {
-            img.addEventListener('click', function() {
-                if (isIOS()) {
-                    alert('请使用iOS截图功能保存二维码：\n1. 同时按下侧边按钮和音量增大键\n2. 打开微信扫描保存的图片');
-                } else {
-                    alert('请使用截图功能保存二维码');
+            }
+            // 应用翻译
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[matchedLang][key]) {
+                    el.textContent = translations[matchedLang][key];
                 }
             });
-        });
+            // RTL支持
+            if (matchedLang === 'ar-SA') {
+                document.body.classList.add('rtl');
+                document.getElementById('contact-card').classList.add('text-right');
+                document.querySelectorAll('.arrow-ani').forEach(icon => {
+                    icon.style.transform = 'scaleX(-1)';
+                });
+                // 调整二维码区域排列
+                document.querySelector('.qr-code-container').style.flexDirection = 'row-reverse';
+            } else {
+                document.body.classList.remove('rtl');
+                document.getElementById('contact-card').classList.remove('text-right');
+                document.querySelectorAll('.arrow-ani').forEach(icon => {
+                    icon.style.transform = '';
+                });
+                document.querySelector('.qr-code-container').style.flexDirection = 'row';
+            }
+        }
+
+        // 复制号码到剪贴板
+        function copyNumber(number, element) {
+            navigator.clipboard.writeText(number).then(() => {
+                const copyBtn = element.querySelector('.copy-btn');
+                const originalHTML = copyBtn.innerHTML;
+                
+                copyBtn.innerHTML = `
+                    <i class="fa fa-check text-green-500"></i>
+                    <span class="copied-tip">${translations[detectLanguage()]['copy-success']}</span>
+                `;
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalHTML;
+                }, 1200);
+            }).catch(err => {
+                console.error('复制失败: ', err);
+                alert('复制失败，请手动复制号码');
+            });
+        }
+
+        function detectLanguage() {
+            const userLang = navigator.language || navigator.userLanguage;
+            const defaultLang = 'en-US';
+            for (const lang in translations) {
+                if (userLang === lang || userLang.startsWith(lang.split('-')[0])) {
+                    return lang;
+                }
+            }
+            return defaultLang;
+        }
         
-        // 页面加载时滚动到顶部
-        window.onload = function() {
-            window.scrollTo(0, 0);
-        };
+        // 创建涟漪效果
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const circle = document.createElement("span");
+            const diameter = Math.max(button.clientWidth, button.clientHeight);
+            const radius = diameter / 2;
+            
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+            circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+            circle.classList.add("ripple");
+            
+            const ripple = button.getElementsByClassName("ripple")[0];
+            if (ripple) {
+                ripple.remove();
+            }
+            
+            button.appendChild(circle);
+        }
+
+        // 初始化链接跳转逻辑
+        function initLinks() {
+            const phoneNumber = '8618938295136';
+            const facebookId = '100085046826505';
+
+            document.getElementById('whatsapp-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                createRipple(e);
+                
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                if (isMobile) {
+                    window.location.href = `whatsapp://send?phone=${phoneNumber}`;
+                    setTimeout(() => {
+                        window.location.href = `https://api.whatsapp.com/send?phone=${phoneNumber}`;
+                    }, 2000);
+                } else {
+                    window.location.href = `https://web.whatsapp.com/send?phone=${phoneNumber}`;
+                }
+            });
+
+            document.getElementById('wechat-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                createRipple(e);
+                
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                const isWechat = /MicroMessenger/i.test(navigator.userAgent);
+                if (isWechat) {
+                    alert('请手动复制号码添加：' + phoneNumber);
+                    navigator.clipboard.writeText(phoneNumber);
+                } else if (isMobile) {
+                    alert('请在微信中搜索此号码添加：' + phoneNumber);
+                } else {
+                    alert('请在手机微信中搜索此号码添加：' + phoneNumber);
+                }
+            });
+
+            document.getElementById('facebook-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                createRipple(e);
+                
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                if (isMobile) {
+                    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                        window.location.href = `fb://profile/${facebookId}`;
+                    } else {
+                        window.location.href = `fb://page/${facebookId}`;
+                    }
+                    setTimeout(() => {
+                        window.location.href = `https://www.facebook.com/profile.php?id=${facebookId}`;
+                    }, 2000);
+                } else {
+                    window.location.href = `https://www.facebook.com/profile.php?id=${facebookId}`;
+                }
+            });
+            
+            // 初始化复制按钮
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const numberArea = this.closest('.copy-section').querySelector('.number-copy-area');
+                    const number = numberArea.getAttribute('data-number');
+                    copyNumber(number, this.closest('.copy-section'));
+                });
+            });
+            
+            // 初始化二维码点击
+            document.querySelectorAll('.qr-code-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const app = this.getAttribute('data-app');
+                    let url = '';
+                    
+                    if (app === 'whatsapp') {
+                        url = 'https://wa.me/qr/ANROANHRQHE4A1';
+                    } else if (app === 'wechat') {
+                        url = 'https://u.wechat.com/EDJ7FWME2zNJ1NIcSg7Kx0Y';
+                    }
+                    
+                    if (url) {
+                        window.open(url, '_blank');
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            detectAndApplyLanguage();
+            initLinks();
+        });
     </script>
 </body>
 </html>
