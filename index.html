@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BatteryExport - Professional Lithium Battery Solutions</title>
+    <title>BatteryExport - 专业锂电池解决方案</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -33,6 +33,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             overflow: hidden;
             margin: 15px auto;
+            position: relative;
         }
         
         header {
@@ -143,6 +144,7 @@
             padding: 12px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             width: 150px;
+            position: relative;
         }
         
         .qr-item img {
@@ -189,22 +191,41 @@
             background: rgba(255, 255, 255, 0.3);
         }
         
-        .language-selector {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            padding: 8px 12px;
-            border-radius: 20px;
-            color: white;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .ios-tips {
+            background: #f0f9ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 0 20px 15px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #2c3e50;
+            border: 1px solid #cdeeff;
+            display: none;
         }
         
-        .language-selector:hover {
-            background: rgba(255, 255, 255, 0.3);
+        .ios-tips i {
+            color: #3498db;
+            margin-right: 5px;
+        }
+        
+        .wechat-tooltip {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            z-index: 10;
+            display: none;
+            text-align: center;
+            width: 90%;
+        }
+        
+        .qr-item:hover .wechat-tooltip {
+            display: block;
         }
         
         @media (max-width: 480px) {
@@ -236,9 +257,14 @@
             <div class="logo">
                 <i class="fas fa-battery-full"></i>
             </div>
-            <h1>Contact Us</h1>
-            <div class="slogan">Professional lithium battery solutions</div>
+            <h1>联系我们</h1>
+            <div class="slogan">专业锂电池解决方案</div>
         </header>
+        
+        <div class="ios-tips" id="ios-tips">
+            <i class="fas fa-info-circle"></i>
+            在iOS设备上，请点击"打开微信"按钮直接跳转，或扫描二维码添加联系人
+        </div>
         
         <div class="contact-list">
             <div class="contact-item whatsapp" onclick="openWhatsApp()">
@@ -257,7 +283,7 @@
                     <i class="fab fa-weixin"></i>
                 </div>
                 <div class="contact-info">
-                    <div class="contact-name">WeChat</div>
+                    <div class="contact-name">微信</div>
                     <div class="contact-value">+86 189 3829 5136</div>
                 </div>
                 <i class="fas fa-chevron-right" style="color: #888;"></i>
@@ -279,7 +305,7 @@
                     <i class="fas fa-envelope"></i>
                 </div>
                 <div class="contact-info">
-                    <div class="contact-name">Email</div>
+                    <div class="contact-name">邮箱</div>
                     <div class="contact-value">battery3136@gmail.com</div>
                 </div>
                 <i class="fas fa-chevron-right" style="color: #888;"></i>
@@ -289,38 +315,70 @@
         <div class="qr-section">
             <div class="qr-container">
                 <div class="qr-item">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://u.wechat.com/EDJ7FWME2zNJ1NIcSg7Kx0Y" alt="WeChat QR Code">
-                    <div class="qr-label">WeChat</div>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://u.wechat.com/EDJ7FWME2zNJ1NIcSg7Kx0Y" alt="微信二维码">
+                    <div class="qr-label">微信</div>
+                    <div class="wechat-tooltip">长按保存二维码，在微信中扫描添加</div>
                 </div>
                 <div class="qr-item">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://wa.me/message/P5C34VFDAD5NK1" alt="WhatsApp QR Code">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://wa.me/message/P5C34VFDAD5NK1" alt="WhatsApp二维码">
                     <div class="qr-label">WhatsApp</div>
                 </div>
             </div>
+            
+            <button class="wechat-btn" onclick="openWeChat()">
+                <i class="fab fa-weixin"></i> 打开微信
+            </button>
         </div>
     </div>
     
     <footer>
-        <p>© 2023 BatteryExport - Professional Lithium Battery Solutions</p>
+        <p>© 2023 BatteryExport - 专业锂电池解决方案</p>
     </footer>
 
     <script>
-        // 联系功能
+        // 检测iOS设备
+        function isIOS() {
+            return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        }
+        
+        // 显示iOS提示
+        if (isIOS()) {
+            document.getElementById('ios-tips').style.display = 'block';
+        }
+        
+        // 微信跳转函数（iOS兼容方案）
+        function openWeChat() {
+            // 尝试直接打开微信
+            window.location.href = 'weixin://';
+            
+            // 备用方案：如果打不开微信，显示提示
+            setTimeout(function() {
+                if (!document.hidden) {
+                    alert('无法打开微信，请确保已安装微信应用。或者扫描二维码添加联系人。');
+                }
+            }, 1000);
+        }
+        
+        // WhatsApp跳转
         function openWhatsApp() {
             window.location.href = 'https://wa.me/message/P5C34VFDAD5NK1';
         }
-
-        function openWeChat() {
-            window.location.href = 'https://u.wechat.com/EDJ7FWME2zNJ1NIcSg7Kx0Y';
-        }
-
+        
+        // Facebook跳转
         function openFacebook() {
             window.location.href = 'https://www.facebook.com/profile.php?id=100085046826505';
         }
-
+        
+        // 邮箱跳转
         function openEmail() {
             window.location.href = 'mailto:battery3136@gmail.com';
         }
+        
+        // 添加微信二维码长按保存功能
+        document.querySelector('.qr-item img').addEventListener('longpress', function(e) {
+            e.preventDefault();
+            alert('请使用截图功能保存二维码');
+        }, false);
     </script>
 </body>
 </html>
