@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -136,6 +135,7 @@
             justify-content: space-around;
             flex-wrap: wrap;
             gap: 15px;
+            margin-bottom: 20px;
         }
         
         .qr-item {
@@ -200,12 +200,20 @@
             font-size: 0.9rem;
             color: #2c3e50;
             border: 1px solid #cdeeff;
-            display: none;
         }
         
         .ios-tips i {
             color: #3498db;
             margin-right: 5px;
+        }
+        
+        .ios-tips ul {
+            text-align: left;
+            margin: 10px 0 0 20px;
+        }
+        
+        .ios-tips li {
+            margin-bottom: 8px;
         }
         
         .wechat-tooltip {
@@ -228,6 +236,49 @@
             display: block;
         }
         
+        /* iOS专用跳转按钮 */
+        .ios-jump-btn {
+            background: #09B83E;
+            color: white;
+            border: none;
+            width: 90%;
+            max-width: 300px;
+            padding: 15px 20px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px auto;
+            box-shadow: 0 5px 15px rgba(9, 184, 62, 0.3);
+        }
+        
+        .ios-jump-btn i {
+            margin-right: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .ios-jump-btn:hover {
+            background: #07a84e;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(9, 184, 62, 0.4);
+        }
+        
+        .ios-jump-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .whatsapp-btn {
+            background: #25D366;
+        }
+        
+        .whatsapp-btn:hover {
+            background: #128C7E;
+        }
+        
         @media (max-width: 480px) {
             .qr-container {
                 flex-direction: column;
@@ -245,6 +296,12 @@
             .contact-item {
                 padding: 12px;
             }
+            
+            .ios-jump-btn {
+                width: 85%;
+                font-size: 1rem;
+                padding: 14px 18px;
+            }
         }
     </style>
 </head>
@@ -261,9 +318,15 @@
             <div class="slogan">专业锂电池解决方案</div>
         </header>
         
-        <div class="ios-tips" id="ios-tips">
+        <div class="ios-tips">
             <i class="fas fa-info-circle"></i>
-            在iOS设备上，请点击"打开微信"按钮直接跳转，或扫描二维码添加联系人
+            <strong>iOS设备使用指南：</strong>
+            <ul>
+                <li>微信跳转：点击下方"打开微信"按钮</li>
+                <li>WhatsApp跳转：点击下方"打开WhatsApp"按钮</li>
+                <li>如果无法直接跳转，请使用二维码添加联系人</li>
+                <li>长按二维码可保存到相册</li>
+            </ul>
         </div>
         
         <div class="contact-list">
@@ -325,8 +388,13 @@
                 </div>
             </div>
             
-            <button class="wechat-btn" onclick="openWeChat()">
+            <!-- iOS专用跳转按钮 -->
+            <button class="ios-jump-btn wechat-btn" onclick="openWeChat()">
                 <i class="fab fa-weixin"></i> 打开微信
+            </button>
+            
+            <button class="ios-jump-btn whatsapp-btn" onclick="openWhatsApp()">
+                <i class="fab fa-whatsapp"></i> 打开WhatsApp
             </button>
         </div>
     </div>
@@ -339,11 +407,6 @@
         // 检测iOS设备
         function isIOS() {
             return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        }
-        
-        // 显示iOS提示
-        if (isIOS()) {
-            document.getElementById('ios-tips').style.display = 'block';
         }
         
         // 微信跳转函数（iOS兼容方案）
@@ -359,9 +422,17 @@
             }, 1000);
         }
         
-        // WhatsApp跳转
+        // WhatsApp跳转（iOS兼容方案）
         function openWhatsApp() {
-            window.location.href = 'https://wa.me/message/P5C34VFDAD5NK1';
+            // 尝试直接打开WhatsApp
+            window.location.href = 'whatsapp://send?phone=+8618938295136';
+            
+            // 备用方案：如果打不开WhatsApp，显示提示
+            setTimeout(function() {
+                if (!document.hidden) {
+                    window.location.href = 'https://wa.me/message/P5C34VFDAD5NK1';
+                }
+            }, 500);
         }
         
         // Facebook跳转
@@ -374,11 +445,21 @@
             window.location.href = 'mailto:battery3136@gmail.com';
         }
         
-        // 添加微信二维码长按保存功能
-        document.querySelector('.qr-item img').addEventListener('longpress', function(e) {
-            e.preventDefault();
-            alert('请使用截图功能保存二维码');
-        }, false);
+        // 添加长按保存功能（iOS兼容）
+        document.querySelectorAll('.qr-item img').forEach(img => {
+            img.addEventListener('click', function() {
+                if (isIOS()) {
+                    alert('请使用iOS截图功能保存二维码：\n1. 同时按下侧边按钮和音量增大键\n2. 打开微信扫描保存的图片');
+                } else {
+                    alert('请使用截图功能保存二维码');
+                }
+            });
+        });
+        
+        // 页面加载时滚动到顶部
+        window.onload = function() {
+            window.scrollTo(0, 0);
+        };
     </script>
 </body>
 </html>
