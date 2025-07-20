@@ -241,6 +241,26 @@
                 transform: scale(0.98);
                 transition: transform 0.2s;
             }
+            
+            /* 新增：提示信息样式 */
+            .toast {
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: #333;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 4px;
+                z-index: 10000;
+                opacity: 0;
+                transition: opacity 0.3s;
+                font-size: 0.9rem;
+            }
+            
+            .toast.show {
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -305,7 +325,7 @@
             <h3 class="text-lg font-semibold text-gray-800 mb-3" data-i18n="scan-qrcodes">Scan QR Codes</h3>
             <div class="qr-code-container">
                 <!-- WhatsApp 二维码 -->
-                <div class="qr-code-card" onclick="window.open('https://api.whatsapp.com/send?phone=+8618938295136', '_blank')">
+                <div class="qr-code-card" onclick="openWhatsApp()">
                     <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://api.whatsapp.com/send?phone=+8618938295136" alt="WhatsApp QR Code" class="qr-code-image">
                     <div class="qr-code-label text-whatsapp" data-i18n="whatsapp">WhatsApp</div>
                 </div>
@@ -346,22 +366,8 @@
         </div>
     </div>
     
-    <!-- Safari提示模态框 -->
-    <div id="safari-tip-modal" class="wechat-modal">
-        <div class="wechat-modal-content">
-            <div class="wechat-modal-close" onclick="closeSafariTipModal()">&times;</div>
-            <div class="wechat-modal-title text-whatsapp">
-                <i class="fa fa-whatsapp mr-2"></i>Open WhatsApp
-            </div>
-            <div class="wechat-modal-body">
-                <p class="mb-3">Click "Open" below to launch WhatsApp.</p>
-                <p class="text-sm text-gray-500 mb-4">If the app doesn't open, please check if WhatsApp is installed on your device.</p>
-                <button id="open-whatsapp-btn" class="wechat-modal-btn bg-whatsapp">
-                    <i class="fa fa-whatsapp mr-1"></i> Open WhatsApp
-                </button>
-            </div>
-        </div>
-    </div>
+    <!-- 提示信息 -->
+    <div id="toast" class="toast"></div>
 
     <script>
         // 语言包配置
@@ -381,6 +387,8 @@
                 'wechat-guide-step3': '3. Search for this number',
                 'copy-number': 'Copy Number',
                 'safari-tip': 'Tap "Open" to launch WhatsApp',
+                'copied-wechat': 'WeChat ID copied! Please open WeChat to add me',
+                'copied-whatsapp': 'Opening WhatsApp...'
             },
             'zh-CN': {
                 title: '联系我',
@@ -397,6 +405,8 @@
                 'wechat-guide-step3': '3. 搜索此号码',
                 'copy-number': '复制号码',
                 'safari-tip': '点击"打开"启动WhatsApp',
+                'copied-wechat': '微信号已复制！请打开微信添加我',
+                'copied-whatsapp': '正在打开WhatsApp...'
             },
             'ar-SA': {
                 title: 'اتصل بي',
@@ -413,6 +423,8 @@
                 'wechat-guide-step3': '3. ابحث عن الرقم التالي',
                 'copy-number': 'نسخ الرقم',
                 'safari-tip': 'انقر على "فتح" لفتح WhatsApp',
+                'copied-wechat': 'تم نسخ معرف WeChat! يرجى فتح WeChat لإضافتي',
+                'copied-whatsapp': 'جاري فتح WhatsApp...'
             },
             'de-DE': {
                 title: 'Kontaktiere mich',
@@ -429,6 +441,8 @@
                 'wechat-guide-step3': '3. Suchen Sie nach dieser Nummer',
                 'copy-number': 'Nummer kopieren',
                 'safari-tip': 'Klicken Sie auf "Öffnen", um WhatsApp zu starten',
+                'copied-wechat': 'WeChat-ID kopiert! Bitte öffnen Sie WeChat, um mich hinzuzufügen',
+                'copied-whatsapp': 'WhatsApp wird geöffnet...'
             },
             'ru-RU': {
                 title: 'Свяжитесь со мной',
@@ -445,6 +459,8 @@
                 'wechat-guide-step3': '3. Найдите этот номер',
                 'copy-number': 'Скопировать номер',
                 'safari-tip': 'Нажмите "Открыть", чтобы запустить WhatsApp',
+                'copied-wechat': 'ID WeChat скопирован! Пожалуйста, откройте WeChat, чтобы добавить меня',
+                'copied-whatsapp': 'Открытие WhatsApp...'
             }
         };
 
@@ -495,6 +511,17 @@
             }
         }
 
+        // 显示提示信息
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
         // 复制号码到剪贴板
         function copyNumber(number, element) {
             navigator.clipboard.writeText(number).then(() => {
@@ -516,6 +543,11 @@
                     setTimeout(() => {
                         element.innerHTML = originalHTML;
                     }, 1100);
+                }
+                
+                // 如果是微信ID，显示额外提示
+                if (number === 'vx_18938295136') {
+                    showToast(translations[detectLanguage()]['copied-wechat']);
                 }
             }).catch(err => {
                 console.error('复制失败: ', err);
@@ -549,19 +581,17 @@
             document.body.style.overflow = '';
         }
 
-        // Safari提示模态框控制
-        function openSafariTipModal() {
-            const modal = document.getElementById('safari-tip-modal');
-            modal.classList.add('active');
-            // 阻止背景滚动
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeSafariTipModal() {
-            const modal = document.getElementById('safari-tip-modal');
-            modal.classList.remove('active');
-            // 恢复背景滚动
-            document.body.style.overflow = '';
+        // 打开WhatsApp
+        function openWhatsApp() {
+            const phoneNumber = '+8618938295136';
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}`;
+            
+            showToast(translations[detectLanguage()]['copied-whatsapp']);
+            
+            // 添加延迟以确保用户看到提示
+            setTimeout(() => {
+                window.open(whatsappUrl, '_blank');
+            }, 500);
         }
 
         // 点击模态框外部关闭
@@ -570,17 +600,6 @@
                 closeWechatModal();
             }
         });
-
-        document.getElementById('safari-tip-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeSafariTipModal();
-            }
-        });
-
-        // 检测是否是Safari浏览器
-        function isSafari() {
-            return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        }
 
         // 初始化链接跳转逻辑
         function initLinks() {
@@ -598,28 +617,7 @@
                     this.classList.remove('link-active');
                 }, 200);
                 
-                // 根据浏览器类型选择跳转方式
-                if (isSafari()) {
-                    // 对于Safari浏览器，先显示提示模态框
-                    openSafariTipModal();
-                    document.getElementById('open-whatsapp-btn').onclick = function() {
-                        window.location.href = `whatsapp://send?phone=${phoneNumber}`;
-                        setTimeout(() => {
-                            closeSafariTipModal();
-                        }, 500);
-                    };
-                } else {
-                    // 对于其他浏览器，直接跳转
-                    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-                    if (isMobile) {
-                        window.location.href = `whatsapp://send?phone=${phoneNumber}`;
-                        setTimeout(() => {
-                            window.location.href = `https://api.whatsapp.com/send?phone=${phoneNumber}`;
-                        }, 2000);
-                    } else {
-                        window.location.href = `https://web.whatsapp.com/send?phone=${phoneNumber}`;
-                    }
-                }
+                openWhatsApp();
             });
 
             // 微信链接处理
@@ -632,6 +630,8 @@
                     this.classList.remove('link-active');
                 }, 200);
                 
+                // 复制微信号并提示
+                copyNumber('vx_18938295136');
                 openWechatModal();
             });
 
@@ -645,19 +645,8 @@
                     this.classList.remove('link-active');
                 }, 200);
                 
-                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-                if (isMobile) {
-                    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                        window.location.href = `fb://profile/${facebookId}`;
-                    } else {
-                        window.location.href = `fb://page/${facebookId}`;
-                    }
-                    setTimeout(() => {
-                        window.location.href = `https://www.facebook.com/profile.php?id=${facebookId}`;
-                    }, 2000);
-                } else {
-                    window.location.href = `https://www.facebook.com/profile.php?id=${facebookId}`;
-                }
+                const facebookUrl = `https://www.facebook.com/profile.php?id=${facebookId}`;
+                window.open(facebookUrl, '_blank');
             });
         }
 
@@ -668,4 +657,3 @@
     </script>
 </body>
 </html>
-    
